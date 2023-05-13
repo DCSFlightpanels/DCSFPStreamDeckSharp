@@ -7,10 +7,11 @@
 
   <!-- nuget stuff -->
   <PropertyGroup>
-    <Title>StreamDeckSharp</Title>
-    <Version>4.2.0-preview</Version>
+    <Title>DCSStreamDeckSharp</Title>
+    <Version>4.3.0</Version>
     <Description>A simple .NET wrapper for StreamDeck (using OpenMacroBoard.SDK)</Description>
-    <RepositoryUrl>https://github.com/OpenMacroBoard/StreamDeckSharp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/DCSFlightpanels/DCSStreamDeckSharp</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
