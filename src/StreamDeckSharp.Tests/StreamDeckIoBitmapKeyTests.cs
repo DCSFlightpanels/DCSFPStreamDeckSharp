@@ -4,6 +4,7 @@ using OpenMacroBoard.SDK;
 using StreamDeckSharp.Internals;
 using System;
 using System.Threading.Tasks;
+using OpenMacroBoard.Meta.TestUtils.VerifyStuff;
 using VerifyXunit;
 using Xunit;
 

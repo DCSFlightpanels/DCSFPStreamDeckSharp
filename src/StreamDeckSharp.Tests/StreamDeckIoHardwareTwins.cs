@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using OpenMacroBoard.Meta.TestUtils;
 using StreamDeckSharp.Internals;
 using System.Threading.Tasks;
+using OpenMacroBoard.Meta.TestUtils.VerifyStuff;
 using VerifyXunit;
 using Xunit;
 

@@ -32,6 +32,12 @@ namespace StreamDeckSharp
             => Internal_StreamDeckXL;
 
         /// <summary>
+        /// Details about the Stream Deck XL Rev2
+        /// </summary>
+        public static IUsbHidHardware StreamDeckXLRev2
+            => Internal_StreamDeckXLRev2;
+
+        /// <summary>
         /// Details about the Stream Deck Mini
         /// </summary>
         public static IUsbHidHardware StreamDeckMini
@@ -42,6 +48,12 @@ namespace StreamDeckSharp
         /// </summary>
         public static IUsbHidHardware SteamDeckMiniRev2
             => Internal_StreamDeckMiniRev2;
+
+        /// <summary>
+        /// Details about the Stream Deck Plus
+        /// </summary>
+        public static IUsbHidHardware SteamDeckPlus
+            => Internal_StreamDeckPlus;
 
         internal static IHardwareInternalInfos Internal_StreamDeck { get; }
             = new StreamDeckHardwareInfo();
@@ -55,10 +67,16 @@ namespace StreamDeckSharp
         internal static IHardwareInternalInfos Internal_StreamDeckXL { get; }
             = new StreamDeckXlHardwareInfo();
 
+        internal static IHardwareInternalInfos Internal_StreamDeckXLRev2 { get; }
+            = new StreamDeckXlRev2HardwareInfo();
+
         internal static IHardwareInternalInfos Internal_StreamDeckMini { get; }
             = new StreamDeckMiniHardwareInfo(UsbConstants.ProductIds.StreamDeckMini, "Stream Deck Mini");
 
         internal static IHardwareInternalInfos Internal_StreamDeckMiniRev2 { get; }
             = new StreamDeckMiniHardwareInfo(UsbConstants.ProductIds.StreamDeckMiniRev2, "Stream Deck Mini Rev2");
+
+        internal static IHardwareInternalInfos Internal_StreamDeckPlus { get; }
+            = new StreamDeckPlusHardwareInfo();
     }
 }
