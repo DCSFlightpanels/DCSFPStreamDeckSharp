@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DCSOpenMacroBoardMetaProject\src\OpenMacroBoard.Meta.TestUtils\OpenMacroBoard.Meta.TestUtils.csproj" />
     <ProjectReference Include="..\StreamDeckSharp\StreamDeckSharp.csproj" />
   </ItemGroup>
 

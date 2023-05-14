@@ -1,9 +1,10 @@
-//using OpenMacroBoard.Meta.TestUtils;
+using OpenMacroBoard.Meta.TestUtils;
 using StreamDeckSharp.Internals;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenMacroBoard.Meta.TestUtils.VerifyStuff;
 using VerifyXunit;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace StreamDeckSharp.Tests
     [UsesVerify]
     public class StreamDeckIoKeyTests
     {
-        /*public ExtendedVerifySettings Verifier { get; } = DefaultVerifySettings.Build();
+        public ExtendedVerifySettings Verifier { get; } = DefaultVerifySettings.Build();
 
         public static IEnumerable<object[]> GetReportTestData()
         {
@@ -342,6 +343,6 @@ namespace StreamDeckSharp.Tests
             public string TestName { get; set; }
             public IEnumerable<byte[]> InputReports { get; set; }
             public IHardwareInternalInfos Hardware { get; set; }
-        }*/
+        }
     }
 }

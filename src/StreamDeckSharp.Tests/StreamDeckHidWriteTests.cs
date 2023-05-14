@@ -1,8 +1,9 @@
-//using OpenMacroBoard.Meta.TestUtils;
+using OpenMacroBoard.Meta.TestUtils;
 using StreamDeckSharp.Internals;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OpenMacroBoard.Meta.TestUtils.VerifyStuff;
 using VerifyXunit;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace StreamDeckSharp.Tests
 {
     [UsesVerify]
     public class StreamDeckHidWriteTests
-    {/*
+    {
         public ExtendedVerifySettings Verifier { get; } = DefaultVerifySettings.Build();
 
         public static IEnumerable<object[]> GetDataForBrightnessTest()
@@ -62,6 +63,6 @@ namespace StreamDeckSharp.Tests
 
             // Assert
             await Verifier.VerifyAsync(context.Log.ToString());
-        }*/
+        }
     }
 }
