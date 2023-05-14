@@ -23,8 +23,10 @@ namespace StreamDeckSharp.Internals
                 ProductIds.StreamDeckRev2 => Hardware.Internal_StreamDeckRev2,
                 ProductIds.StreamDeckMK2 => Hardware.Internal_StreamDeckMK2,
                 ProductIds.StreamDeckXL => Hardware.Internal_StreamDeckXL,
+                ProductIds.StreamDeckXLRev2 => Hardware.Internal_StreamDeckXLRev2,
                 ProductIds.StreamDeckMini => Hardware.Internal_StreamDeckMini,
                 ProductIds.StreamDeckMiniRev2 => Hardware.Internal_StreamDeckMiniRev2,
+                ProductIds.StreamDeckPlus => Hardware.Internal_StreamDeckPlus,
                 _ => null,
             };
         }

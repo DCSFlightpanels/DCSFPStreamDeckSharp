@@ -13,8 +13,10 @@ namespace StreamDeckSharp
             public const int StreamDeckRev2 = 0x006d;
             public const int StreamDeckMK2 = 0x0080;
             public const int StreamDeckXL = 0x006c;
+            public const int StreamDeckXLRev2 = 0x008F;
             public const int StreamDeckMini = 0x0063;
             public const int StreamDeckMiniRev2 = 0x0090;
+            public const int StreamDeckPlus = 0x0084;
         }
     }
 }
