@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamDeckSharp", "StreamDeckSharp\StreamDeckSharp.csproj", "{10AE311A-E73B-4E27-BA3C-39D57A8320DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamDeckSharp", "src\StreamDeckSharp\StreamDeckSharp.csproj", "{10AE311A-E73B-4E27-BA3C-39D57A8320DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamDeckSharp.Tests", "StreamDeckSharp.Tests\StreamDeckSharp.Tests.csproj", "{713B1424-F0AA-4BB3-A8FB-7BBDC907E9C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StreamDeckSharp.Tests", "src\StreamDeckSharp.Tests\StreamDeckSharp.Tests.csproj", "{713B1424-F0AA-4BB3-A8FB-7BBDC907E9C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
