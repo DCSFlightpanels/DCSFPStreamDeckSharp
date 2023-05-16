@@ -16,9 +16,12 @@
 
   <ItemGroup>
     <PackageReference Include="HidSharp" Version="2.1.0" />
-    <PackageReference Include="OpenMacroBoard.SDK" Version="5.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <None Include="icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DCSFPOpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
   </ItemGroup>
 
 </Project>
