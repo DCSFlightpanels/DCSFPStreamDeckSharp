@@ -8,10 +8,10 @@ namespace StreamDeckSharp.Internals
     internal sealed class StreamDeckHardwareInfo
         : IHardwareInternalInfos
     {
-        private const int ImgWidth = 72;
-        private const int ColorChannels = 3;
+        private const int IMG_WIDTH = 72;
+        private const int COLOR_CHANNELS = 3;
 
-        private static readonly GridKeyLayout KeyPositions = new(5, 3, ImgWidth, 30);
+        private static readonly GridKeyLayout KeyPositions = new(5, 3, IMG_WIDTH, 30);
 
         private static readonly byte[] BmpHeader = new byte[]
         {
@@ -25,7 +25,7 @@ namespace StreamDeckSharp.Internals
         };
 
         public int KeyCount => KeyPositions.Count;
-        public int IconSize => ImgWidth;
+        public int IconSize => IMG_WIDTH;
         public int HeaderSize => 16;
         public int ReportSize => 7819;
         public int ExpectedFeatureReportLength => 17;
@@ -33,8 +33,8 @@ namespace StreamDeckSharp.Internals
         public int ExpectedInputReportLength => 17;
 
         public int KeyReportOffset => 1;
-        public int UsbVendorId => VendorIds.ElgatoSystemsGmbH;
-        public int UsbProductId => ProductIds.StreamDeck;
+        public int UsbVendorId => VendorIds.ELGATO_SYSTEMS_GMBH;
+        public int UsbProductId => ProductIds.STREAM_DECK;
         public string DeviceName => "Stream Deck";
         public byte FirmwareVersionFeatureId => 4;
         public byte SerialNumberFeatureId => 3;
@@ -57,19 +57,19 @@ namespace StreamDeckSharp.Internals
 
         public byte[] GeneratePayload(KeyBitmap keyBitmap)
         {
-            var rawData = keyBitmap.GetScaledVersion(ImgWidth, ImgWidth);
+            var rawData = keyBitmap.GetScaledVersion(IMG_WIDTH, IMG_WIDTH);
 
-            var bmp = new byte[ImgWidth * ImgWidth * 3 + BmpHeader.Length];
+            var bmp = new byte[IMG_WIDTH * IMG_WIDTH * 3 + BmpHeader.Length];
             Array.Copy(BmpHeader, 0, bmp, 0, BmpHeader.Length);
 
             if (rawData.Length != 0)
             {
-                for (var y = 0; y < ImgWidth; y++)
+                for (var y = 0; y < IMG_WIDTH; y++)
                 {
-                    for (var x = 0; x < ImgWidth; x++)
+                    for (var x = 0; x < IMG_WIDTH; x++)
                     {
-                        var src = (y * ImgWidth + x) * ColorChannels;
-                        var tar = (y * ImgWidth + (ImgWidth - 1 - x)) * ColorChannels + BmpHeader.Length;
+                        var src = (y * IMG_WIDTH + x) * COLOR_CHANNELS;
+                        var tar = (y * IMG_WIDTH + (IMG_WIDTH - 1 - x)) * COLOR_CHANNELS + BmpHeader.Length;
 
                         bmp[tar + 0] = rawData[src + 0];
                         bmp[tar + 1] = rawData[src + 1];

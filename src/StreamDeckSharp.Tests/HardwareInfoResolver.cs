@@ -7,12 +7,12 @@ namespace StreamDeckSharp.Tests
     {
         internal static IEnumerable<IHardwareInternalInfos> GetAllHardwareInfos()
         {
-            yield return Hardware.Internal_StreamDeck;
-            yield return Hardware.Internal_StreamDeckMini;
-            yield return Hardware.Internal_StreamDeckMK2;
-            yield return Hardware.Internal_StreamDeckRev2;
-            yield return Hardware.Internal_StreamDeckXL;
-            yield return Hardware.Internal_StreamDeckMiniRev2;
+            yield return Hardware.InternalStreamDeck;
+            yield return Hardware.InternalStreamDeckMini;
+            yield return Hardware.InternalStreamDeckMK2;
+            yield return Hardware.InternalStreamDeckRev2;
+            yield return Hardware.InternalStreamDeckXL;
+            yield return Hardware.InternalStreamDeckMiniRev2;
         }
     }
 }

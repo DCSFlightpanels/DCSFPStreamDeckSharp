@@ -7,8 +7,8 @@ namespace StreamDeckSharp.Internals
 {
     internal class BasicHidClient : IMacroBoard
     {
-        private readonly byte[] keyStates;
-        private readonly object disposeLock = new();
+        private readonly byte[] _keyStates;
+        private readonly object _disposeLock = new();
 
         public BasicHidClient(IStreamDeckHid deckHid, IHardwareInternalInfos hardwareInformation)
         {
@@ -20,7 +20,7 @@ namespace StreamDeckSharp.Internals
 
             HardwareInfo = hardwareInformation;
             Buffer = new byte[deckHid.OutputReportLength];
-            keyStates = new byte[Keys.Count];
+            _keyStates = new byte[Keys.Count];
         }
 
         public event EventHandler<KeyEventArgs> KeyStateChanged;
@@ -91,7 +91,7 @@ namespace StreamDeckSharp.Internals
         {
             if (disposing)
             {
-                lock (disposeLock)
+                lock (_disposeLock)
                 {
                     if (IsDisposed)
                     {
@@ -139,15 +139,15 @@ namespace StreamDeckSharp.Internals
 
         private void ProcessKeys(byte[] newStates)
         {
-            for (var i = 0; i < keyStates.Length; i++)
+            for (var i = 0; i < _keyStates.Length; i++)
             {
                 var newStatePos = i + HardwareInfo.KeyReportOffset;
 
-                if (keyStates[i] != newStates[newStatePos])
+                if (_keyStates[i] != newStates[newStatePos])
                 {
                     var externalKeyId = HardwareInfo.HardwareKeyIdToExtKeyId(i);
                     KeyStateChanged?.Invoke(this, new KeyEventArgs(externalKeyId, newStates[newStatePos] != 0));
-                    keyStates[i] = newStates[newStatePos];
+                    _keyStates[i] = newStates[newStatePos];
                 }
             }
         }

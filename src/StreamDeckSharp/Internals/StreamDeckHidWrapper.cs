@@ -10,8 +10,8 @@ namespace StreamDeckSharp.Internals
 {
     internal sealed class StreamDeckHidWrapper : IStreamDeckHid
     {
-        private readonly object hidStreamLock = new();
-        private readonly string devicePath;
+        private readonly object _hidStreamLock = new();
+        private readonly string _devicePath;
 
         /// <summary>
         /// Used to throttle write speed.
@@ -58,11 +58,11 @@ namespace StreamDeckSharp.Internals
         /// other devices that work as expected we set <see cref="double.PositiveInfinity"/> (unlimited).
         /// </para>
         /// </remarks>
-        private readonly Throttle throttle;
+        private readonly Throttle _throttle;
 
-        private readonly IHardwareInternalInfos hardwareInfo;
-        private HidStream dStream;
-        private byte[] readReportBuffer;
+        private readonly IHardwareInternalInfos _hardwareInfo;
+        private HidStream _dStream;
+        private byte[] _readReportBuffer;
 
         public StreamDeckHidWrapper(HidDevice device, IHardwareInternalInfos hardwareInfo)
         {
@@ -71,14 +71,14 @@ namespace StreamDeckSharp.Internals
                 throw new ArgumentNullException(nameof(device));
             }
 
-            this.hardwareInfo = hardwareInfo ?? throw new ArgumentNullException(nameof(hardwareInfo));
+            this._hardwareInfo = hardwareInfo ?? throw new ArgumentNullException(nameof(hardwareInfo));
 
             if (hardwareInfo.BytesPerSecondLimit < double.PositiveInfinity)
             {
-                throttle = new() { BytesPerSecondLimit = hardwareInfo.BytesPerSecondLimit };
+                _throttle = new() { BytesPerSecondLimit = hardwareInfo.BytesPerSecondLimit };
             }
 
-            devicePath = device.DevicePath;
+            _devicePath = device.DevicePath;
             DeviceList.Local.Changed += Local_Changed;
 
             InitializeDeviceSettings(device);
@@ -91,7 +91,7 @@ namespace StreamDeckSharp.Internals
         public int OutputReportLength { get; private set; }
         public int FeatureReportLength { get; private set; }
 
-        public bool IsConnected => dStream != null;
+        public bool IsConnected => _dStream != null;
 
         public void Dispose()
         {
@@ -103,7 +103,7 @@ namespace StreamDeckSharp.Internals
             data = new byte[FeatureReportLength];
             data[0] = id;
 
-            var targetStream = dStream;
+            var targetStream = _dStream;
 
             if (targetStream is null)
             {
@@ -112,9 +112,9 @@ namespace StreamDeckSharp.Internals
 
             try
             {
-                lock (hidStreamLock)
+                lock (_hidStreamLock)
                 {
-                    throttle?.MeasureAndBlock(data.Length);
+                    _throttle?.MeasureAndBlock(data.Length);
                     targetStream.GetFeature(data);
                     return true;
                 }
@@ -136,7 +136,7 @@ namespace StreamDeckSharp.Internals
                 featureData = resizedData;
             }
 
-            var targetStream = dStream;
+            var targetStream = _dStream;
 
             if (targetStream is null)
             {
@@ -145,9 +145,9 @@ namespace StreamDeckSharp.Internals
 
             try
             {
-                lock (hidStreamLock)
+                lock (_hidStreamLock)
                 {
-                    throttle?.MeasureAndBlock(featureData.Length);
+                    _throttle?.MeasureAndBlock(featureData.Length);
                     targetStream.SetFeature(featureData);
                 }
 
@@ -162,7 +162,7 @@ namespace StreamDeckSharp.Internals
 
         public bool WriteReport(byte[] reportData)
         {
-            var targetStream = dStream;
+            var targetStream = _dStream;
 
             if (targetStream is null)
             {
@@ -171,9 +171,9 @@ namespace StreamDeckSharp.Internals
 
             try
             {
-                lock (hidStreamLock)
+                lock (_hidStreamLock)
                 {
-                    throttle?.MeasureAndBlock(reportData.Length);
+                    _throttle?.MeasureAndBlock(reportData.Length);
                     targetStream.Write(reportData);
                 }
 
@@ -213,7 +213,7 @@ namespace StreamDeckSharp.Internals
                 return;
             }
 
-            if (dStream != null)
+            if (_dStream != null)
             {
                 return;
             }
@@ -221,7 +221,7 @@ namespace StreamDeckSharp.Internals
             if (device.TryOpen(out var stream))
             {
                 stream.ReadTimeout = Timeout.Infinite;
-                dStream = stream;
+                _dStream = stream;
                 BeginWaitRead(stream);
                 ConnectionStateChanged?.Invoke(this, new ConnectionEventArgs(true));
             }
@@ -239,31 +239,31 @@ namespace StreamDeckSharp.Internals
             FeatureReportLength = device.GetMaxFeatureReportLength();
 
             Debug.Assert(
-                OutputReportLength == hardwareInfo.ExpectedOutputReportLength,
-                $"Output report length unexpected. Found: {OutputReportLength}. Expected: {hardwareInfo.ExpectedOutputReportLength}"
+                OutputReportLength == _hardwareInfo.ExpectedOutputReportLength,
+                $"Output report length unexpected. Found: {OutputReportLength}. Expected: {_hardwareInfo.ExpectedOutputReportLength}"
             );
 
             Debug.Assert(
-                FeatureReportLength == hardwareInfo.ExpectedFeatureReportLength,
-                $"Feature report length unexpected. Found: {FeatureReportLength}. Expected: {hardwareInfo.ExpectedFeatureReportLength}"
+                FeatureReportLength == _hardwareInfo.ExpectedFeatureReportLength,
+                $"Feature report length unexpected. Found: {FeatureReportLength}. Expected: {_hardwareInfo.ExpectedFeatureReportLength}"
             );
 
             Debug.Assert(
-                inputReportLength == hardwareInfo.ExpectedInputReportLength,
-                $"Input report length unexpected. Found: {inputReportLength}. Expected: {hardwareInfo.ExpectedInputReportLength}"
+                inputReportLength == _hardwareInfo.ExpectedInputReportLength,
+                $"Input report length unexpected. Found: {inputReportLength}. Expected: {_hardwareInfo.ExpectedInputReportLength}"
             );
 
-            readReportBuffer = new byte[OutputReportLength];
+            _readReportBuffer = new byte[OutputReportLength];
         }
 
         private void RefreshConnection()
         {
             var device = DeviceList.Local
                 .GetHidDevices()
-                .FirstOrDefault(d => d.DevicePath == devicePath);
+                .FirstOrDefault(d => d.DevicePath == _devicePath);
 
             var deviceFound = device != null;
-            var deviceActive = dStream != null;
+            var deviceActive = _dStream != null;
 
             if (deviceFound == deviceActive)
             {
@@ -282,8 +282,8 @@ namespace StreamDeckSharp.Internals
 
         private void DisposeConnection()
         {
-            var dStreamRefCopy = dStream;
-            dStream = null;
+            var dStreamRefCopy = _dStream;
+            _dStream = null;
 
             if (dStreamRefCopy is null)
             {
@@ -296,7 +296,7 @@ namespace StreamDeckSharp.Internals
 
         private void BeginWaitRead(HidStream stream)
         {
-            stream.BeginRead(readReportBuffer, 0, readReportBuffer.Length, new AsyncCallback(ReadReportCallback), stream);
+            stream.BeginRead(_readReportBuffer, 0, _readReportBuffer.Length, new AsyncCallback(ReadReportCallback), stream);
         }
 
         private void ReadReportCallback(IAsyncResult ar)
@@ -305,7 +305,7 @@ namespace StreamDeckSharp.Internals
 
             try
             {
-                if (dStream == null)
+                if (_dStream == null)
                 {
                     // connection already disposed
                     return;
@@ -313,7 +313,7 @@ namespace StreamDeckSharp.Internals
 
                 var res = stream.EndRead(ar);
                 var data = new byte[res];
-                Array.Copy(readReportBuffer, 0, data, 0, res);
+                Array.Copy(_readReportBuffer, 0, data, 0, res);
                 ReportReceived?.Invoke(this, new ReportReceivedEventArgs(data));
             }
             catch (Exception ex) when (IsConnectionError(ex))

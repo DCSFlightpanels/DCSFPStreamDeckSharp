@@ -12,20 +12,20 @@ namespace StreamDeckSharp.Internals
     internal abstract class StreamDeckJpgHardwareBase
         : IHardwareInternalInfos
     {
-        private readonly int imgSize;
-        private readonly JpegEncoder jpgEncoder;
+        private readonly int _imgSize;
+        private readonly JpegEncoder _jpgEncoder;
 
-        private byte[] cachedNullImage = null;
+        private byte[] _cachedNullImage = null;
 
         protected StreamDeckJpgHardwareBase(GridKeyLayout keyPositions)
         {
-            jpgEncoder = new JpegEncoder()
+            _jpgEncoder = new JpegEncoder()
             {
                 Quality = 100,
             };
 
             Keys = keyPositions;
-            imgSize = keyPositions.KeySize;
+            _imgSize = keyPositions.KeySize;
         }
 
         public abstract int UsbProductId { get; }
@@ -39,7 +39,7 @@ namespace StreamDeckSharp.Internals
         public int ExpectedInputReportLength => 512;
 
         public int KeyReportOffset => 4;
-        public int UsbVendorId => VendorIds.ElgatoSystemsGmbH;
+        public int UsbVendorId => VendorIds.ELGATO_SYSTEMS_GMBH;
 
         public byte FirmwareVersionFeatureId => 5;
         public byte SerialNumberFeatureId => 6;
@@ -63,7 +63,7 @@ namespace StreamDeckSharp.Internals
 
         public byte[] GeneratePayload(KeyBitmap keyBitmap)
         {
-            var rawData = keyBitmap.GetScaledVersion(imgSize, imgSize);
+            var rawData = keyBitmap.GetScaledVersion(_imgSize, _imgSize);
 
             if (rawData.Length == 0)
             {
@@ -123,29 +123,29 @@ namespace StreamDeckSharp.Internals
 
         private byte[] GetNullImage()
         {
-            if (cachedNullImage is null)
+            if (_cachedNullImage is null)
             {
-                var rawNullImg = KeyBitmap.FromBgr24Array(1, 1, new byte[] { 0, 0, 0 }).GetScaledVersion(imgSize, imgSize);
-                cachedNullImage = EncodeImageToJpg(rawNullImg);
+                var rawNullImg = KeyBitmap.FromBgr24Array(1, 1, new byte[] { 0, 0, 0 }).GetScaledVersion(_imgSize, _imgSize);
+                _cachedNullImage = EncodeImageToJpg(rawNullImg);
             }
 
-            return cachedNullImage;
+            return _cachedNullImage;
         }
 
         private byte[] EncodeImageToJpg(ReadOnlySpan<byte> bgr24)
         {
             // Flip XY ... for some reason the JPEG devices have flipped x and y coordinates.
-            var flippedData = new byte[imgSize * imgSize * 3];
+            var flippedData = new byte[_imgSize * _imgSize * 3];
 
-            for (var y = 0; y < imgSize; y++)
+            for (var y = 0; y < _imgSize; y++)
             {
-                for (var x = 0; x < imgSize; x++)
+                for (var x = 0; x < _imgSize; x++)
                 {
-                    var x1 = imgSize - 1 - x;
-                    var y1 = imgSize - 1 - y;
+                    var x1 = _imgSize - 1 - x;
+                    var y1 = _imgSize - 1 - y;
 
-                    var pTarget = (y * imgSize + x) * 3;
-                    var pSource = (y1 * imgSize + x1) * 3;
+                    var pTarget = (y * _imgSize + x) * 3;
+                    var pSource = (y1 * _imgSize + x1) * 3;
 
                     flippedData[pTarget + 0] = bgr24[pSource + 0];
                     flippedData[pTarget + 1] = bgr24[pSource + 1];
@@ -153,10 +153,10 @@ namespace StreamDeckSharp.Internals
                 }
             }
 
-            using var image = Image.LoadPixelData<Bgr24>(flippedData, imgSize, imgSize);
+            using var image = Image.LoadPixelData<Bgr24>(flippedData, _imgSize, _imgSize);
 
             using var memStream = new MemoryStream();
-            image.SaveAsJpeg(memStream, jpgEncoder);
+            image.SaveAsJpeg(memStream, _jpgEncoder);
 
             return memStream.ToArray();
         }

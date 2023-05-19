@@ -36,7 +36,7 @@ namespace StreamDeckSharp.Tests
 
             yield return new object[]
             {
-                Hardware.Internal_StreamDeck,
+                Hardware.InternalStreamDeck,
                 new byte[]
                 {
                     0x03, 0x55, 0xAA, 0xD3, 0x03, 0x41, 0x4C, 0x31,
@@ -48,7 +48,7 @@ namespace StreamDeckSharp.Tests
 
             yield return new object[]
             {
-                Hardware.Internal_StreamDeckXL,
+                Hardware.InternalStreamDeckXL,
                 new byte[]
                 {
                     0x06, 0x0C, 0x43, 0x4C, 0x31, 0x35, 0x4B, 0x31,
@@ -61,7 +61,7 @@ namespace StreamDeckSharp.Tests
 
             yield return new object[]
             {
-                Hardware.Internal_StreamDeckMK2,
+                Hardware.InternalStreamDeckMK2,
                 new byte[]
                 {
                     0x06, 0x0C, 0x44, 0x4C, 0x33, 0x30, 0x4B, 0x31,
@@ -74,7 +74,7 @@ namespace StreamDeckSharp.Tests
 
             yield return new object[]
             {
-                Hardware.Internal_StreamDeckMini,
+                Hardware.InternalStreamDeckMini,
                 new byte[]
                 {
                     0x03, 0x00, 0x00, 0x00, 0x00, 0x42, 0x4C, 0x31,
