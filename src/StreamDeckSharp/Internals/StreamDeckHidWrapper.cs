@@ -71,7 +71,7 @@ namespace StreamDeckSharp.Internals
                 throw new ArgumentNullException(nameof(device));
             }
 
-            this._hardwareInfo = hardwareInfo ?? throw new ArgumentNullException(nameof(hardwareInfo));
+            _hardwareInfo = hardwareInfo ?? throw new ArgumentNullException(nameof(hardwareInfo));
 
             if (hardwareInfo.BytesPerSecondLimit < double.PositiveInfinity)
             {

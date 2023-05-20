@@ -122,8 +122,8 @@ namespace StreamDeckSharp
 
             public Subscription(StreamDeckListener parent, IObserver<DeviceStateReport> observer)
             {
-                this._parent = parent ?? throw new ArgumentNullException(nameof(parent));
-                this._observer = observer ?? throw new ArgumentNullException(nameof(observer));
+                _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+                _observer = observer ?? throw new ArgumentNullException(nameof(observer));
             }
 
             public void SendUpdates()
