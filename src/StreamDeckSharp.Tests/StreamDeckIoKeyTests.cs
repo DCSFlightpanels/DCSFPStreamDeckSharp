@@ -73,7 +73,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckXL_EachKeyOnce",
-                Hardware = Hardware.Internal_StreamDeckXL,
+                Hardware = Hardware.InternalStreamDeckXL,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 2, 32, 4, 1 },
@@ -146,7 +146,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckXL_MultipleKeysDown",
-                Hardware = Hardware.Internal_StreamDeckXL,
+                Hardware = Hardware.InternalStreamDeckXL,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 2, 32, 4, 1, 5, 1 },
@@ -166,7 +166,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckMK2_EachKeyOnce",
-                Hardware = Hardware.Internal_StreamDeckMK2,
+                Hardware = Hardware.InternalStreamDeckMK2,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 2, 15 },
@@ -204,7 +204,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckMK2_MultipleKeysDown",
-                Hardware = Hardware.Internal_StreamDeckMK2,
+                Hardware = Hardware.InternalStreamDeckMK2,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 2, 15, 4, 1, 5, 1 },
@@ -224,7 +224,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeck_EachKeyOnce",
-                Hardware = Hardware.Internal_StreamDeck,
+                Hardware = Hardware.InternalStreamDeck,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 5, 1 },
@@ -263,7 +263,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeck_MultipleKeysDown",
-                Hardware = Hardware.Internal_StreamDeck,
+                Hardware = Hardware.InternalStreamDeck,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 4, 1, 5, 1 },
@@ -283,7 +283,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckMini_EachKeyOnce",
-                Hardware = Hardware.Internal_StreamDeckMini,
+                Hardware = Hardware.InternalStreamDeckMini,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1 },
@@ -303,7 +303,7 @@ namespace StreamDeckSharp.Tests
             yield return new KeyPressTestCase()
             {
                 TestName = "StreamDeckMini_MultipleKeysDown",
-                Hardware = Hardware.Internal_StreamDeckMini,
+                Hardware = Hardware.InternalStreamDeckMini,
                 InputReports = new List<byte[]>
                 {
                     new byte[] { 0, 1, 1, 1, 2, 1 },

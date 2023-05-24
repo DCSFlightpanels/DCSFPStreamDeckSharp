@@ -12,21 +12,21 @@ namespace StreamDeckSharp.Internals
 
         public static IHardwareInternalInfos GetDeviceDetails(int vendorId, int productId)
         {
-            if (vendorId != VendorIds.ElgatoSystemsGmbH)
+            if (vendorId != VendorIds.ELGATO_SYSTEMS_GMBH)
             {
                 return null;
             }
 
             return productId switch
             {
-                ProductIds.StreamDeck => Hardware.Internal_StreamDeck,
-                ProductIds.StreamDeckRev2 => Hardware.Internal_StreamDeckRev2,
-                ProductIds.StreamDeckMK2 => Hardware.Internal_StreamDeckMK2,
-                ProductIds.StreamDeckXL => Hardware.Internal_StreamDeckXL,
-                ProductIds.StreamDeckXLRev2 => Hardware.Internal_StreamDeckXLRev2,
-                ProductIds.StreamDeckMini => Hardware.Internal_StreamDeckMini,
-                ProductIds.StreamDeckMiniRev2 => Hardware.Internal_StreamDeckMiniRev2,
-                ProductIds.StreamDeckPlus => Hardware.Internal_StreamDeckPlus,
+                ProductIds.STREAM_DECK => Hardware.InternalStreamDeck,
+                ProductIds.STREAM_DECK_REV2 => Hardware.InternalStreamDeckRev2,
+                ProductIds.STREAM_DECK_MK2 => Hardware.InternalStreamDeckMK2,
+                ProductIds.STREAM_DECK_XL => Hardware.InternalStreamDeckXL,
+                ProductIds.STREAM_DECK_XL_REV2 => Hardware.InternalStreamDeckXLRev2,
+                ProductIds.STREAM_DECK_MINI => Hardware.InternalStreamDeckMini,
+                ProductIds.STREAM_DECK_MINI_REV2 => Hardware.InternalStreamDeckMiniRev2,
+                ProductIds.STREAM_DECK_PLUS => Hardware.InternalStreamDeckPlus,
                 _ => null,
             };
         }

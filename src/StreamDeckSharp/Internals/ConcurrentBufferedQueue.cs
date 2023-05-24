@@ -6,22 +6,22 @@ namespace StreamDeckSharp.Internals
 {
     internal sealed class ConcurrentBufferedQueue<TKey, TValue> : IDisposable
     {
-        private readonly object sync = new();
+        private readonly object _sync = new();
 
-        private readonly Dictionary<TKey, TValue> valueBuffer = new();
-        private readonly Queue<TKey> queue = new();
+        private readonly Dictionary<TKey, TValue> _valueBuffer = new();
+        private readonly Queue<TKey> _queue = new();
 
-        private volatile bool isAddingCompleted;
-        private volatile bool disposed;
+        private volatile bool _isAddingCompleted;
+        private volatile bool _disposed;
 
-        public int Count => queue.Count;
+        public int Count => _queue.Count;
 
         public bool IsAddingCompleted
         {
             get
             {
                 ThrowIfDisposed();
-                return isAddingCompleted;
+                return _isAddingCompleted;
             }
         }
 
@@ -29,62 +29,62 @@ namespace StreamDeckSharp.Internals
         {
             get
             {
-                lock (sync)
+                lock (_sync)
                 {
                     ThrowIfDisposed();
-                    return isAddingCompleted && Count == 0;
+                    return _isAddingCompleted && Count == 0;
                 }
             }
         }
 
         public void Add(TKey key, TValue value)
         {
-            lock (sync)
+            lock (_sync)
             {
                 ThrowIfDisposed();
 
-                if (isAddingCompleted)
+                if (_isAddingCompleted)
                 {
                     throw new InvalidOperationException("Adding was already marked as completed.");
                 }
 
                 try
                 {
-                    valueBuffer[key] = value;
+                    _valueBuffer[key] = value;
 
-                    if (!queue.Contains(key))
+                    if (!_queue.Contains(key))
                     {
-                        queue.Enqueue(key);
+                        _queue.Enqueue(key);
                     }
                 }
                 finally
                 {
-                    Monitor.PulseAll(sync);
+                    Monitor.PulseAll(_sync);
                 }
             }
         }
 
         public (bool Success, TKey Key, TValue Value) Take()
         {
-            lock (sync)
+            lock (_sync)
             {
-                while (queue.Count < 1)
+                while (_queue.Count < 1)
                 {
                     ThrowIfDisposed();
 
-                    if (isAddingCompleted)
+                    if (_isAddingCompleted)
                     {
                         return (false, default, default);
                     }
 
-                    Monitor.Wait(sync);
+                    Monitor.Wait(_sync);
                 }
 
                 ThrowIfDisposed();
 
-                var key = queue.Dequeue();
-                var value = valueBuffer[key];
-                valueBuffer.Remove(key);
+                var key = _queue.Dequeue();
+                var value = _valueBuffer[key];
+                _valueBuffer.Remove(key);
 
                 return (true, key, value);
             }
@@ -92,30 +92,30 @@ namespace StreamDeckSharp.Internals
 
         public void CompleteAdding()
         {
-            lock (sync)
+            lock (_sync)
             {
-                if (isAddingCompleted)
+                if (_isAddingCompleted)
                 {
                     return;
                 }
 
-                isAddingCompleted = true;
-                Monitor.PulseAll(sync);
+                _isAddingCompleted = true;
+                Monitor.PulseAll(_sync);
             }
         }
 
         public void Dispose()
         {
-            lock (sync)
+            lock (_sync)
             {
-                if (disposed)
+                if (_disposed)
                 {
                     return;
                 }
 
-                disposed = true;
+                _disposed = true;
 
-                if (!isAddingCompleted)
+                if (!_isAddingCompleted)
                 {
                     CompleteAdding();
                 }
@@ -124,7 +124,7 @@ namespace StreamDeckSharp.Internals
 
         private void ThrowIfDisposed()
         {
-            if (disposed)
+            if (_disposed)
             {
                 throw new ObjectDisposedException(nameof(ConcurrentBufferedQueue<TKey, TValue>));
             }

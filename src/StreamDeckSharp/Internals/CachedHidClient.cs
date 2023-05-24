@@ -7,15 +7,15 @@ namespace StreamDeckSharp.Internals
 {
     internal class CachedHidClient : BasicHidClient
     {
-        private readonly Task writerTask;
-        private readonly ConcurrentBufferedQueue<int, byte[]> imageQueue;
-        private readonly ConditionalWeakTable<KeyBitmap, byte[]> cacheKeyBitmaps = new();
+        private readonly Task _writerTask;
+        private readonly ConcurrentBufferedQueue<int, byte[]> _imageQueue;
+        private readonly ConditionalWeakTable<KeyBitmap, byte[]> _cacheKeyBitmaps = new();
 
         public CachedHidClient(IStreamDeckHid deckHid, IHardwareInternalInfos hardwareInformation)
             : base(deckHid, hardwareInformation)
         {
-            imageQueue = new ConcurrentBufferedQueue<int, byte[]>();
-            writerTask = StartBitmapWriterTask();
+            _imageQueue = new ConcurrentBufferedQueue<int, byte[]>();
+            _writerTask = StartBitmapWriterTask();
         }
 
         public override void SetKeyBitmap(int keyId, KeyBitmap bitmapData)
@@ -23,20 +23,20 @@ namespace StreamDeckSharp.Internals
             ThrowIfAlreadyDisposed();
             keyId = HardwareInfo.ExtKeyIdToHardwareKeyId(keyId);
 
-            var payload = cacheKeyBitmaps.GetValue(bitmapData, HardwareInfo.GeneratePayload);
-            imageQueue.Add(keyId, payload);
+            var payload = _cacheKeyBitmaps.GetValue(bitmapData, HardwareInfo.GeneratePayload);
+            _imageQueue.Add(keyId, payload);
         }
 
         protected override void Shutdown()
         {
-            imageQueue.CompleteAdding();
-            writerTask.Wait();
+            _imageQueue.CompleteAdding();
+            _writerTask.Wait();
         }
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            imageQueue.Dispose();
+            _imageQueue.Dispose();
         }
 
         private Task StartBitmapWriterTask()
@@ -45,7 +45,7 @@ namespace StreamDeckSharp.Internals
             {
                 while (true)
                 {
-                    var (success, keyId, payload) = imageQueue.Take();
+                    var (success, keyId, payload) = _imageQueue.Take();
 
                     if (!success)
                     {

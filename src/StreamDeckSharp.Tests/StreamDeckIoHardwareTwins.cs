@@ -1,10 +1,11 @@
 using Newtonsoft.Json;
-using OpenMacroBoard.Meta.TestUtils;
 using StreamDeckSharp.Internals;
 using System.Threading.Tasks;
 using OpenMacroBoard.Meta.TestUtils.VerifyStuff;
 using VerifyXunit;
 using Xunit;
+using Newtonsoft.Json.Serialization;
+using System.Linq;
 
 namespace StreamDeckSharp.Tests
 {
@@ -12,6 +13,15 @@ namespace StreamDeckSharp.Tests
     public class StreamDeckIoHardwareTwins
     {
         public ExtendedVerifySettings Verifier { get; } = DefaultVerifySettings.Build();
+
+        //Sets the classes attributes in alphabetical order to get a more predictable serialization.
+        public class OrderedContractResolver : DefaultContractResolver
+        {
+            protected override System.Collections.Generic.IList<JsonProperty> CreateProperties(System.Type type, MemberSerialization memberSerialization)
+            {
+                return base.CreateProperties(type, memberSerialization).OrderBy(p => p.PropertyName).ToList();
+            }
+        }
 
         [Theory]
         [ClassData(typeof(AllHardwareInfoTestData))]
@@ -25,7 +35,12 @@ namespace StreamDeckSharp.Tests
                 .UseFileName(hardware.DeviceName)
                 ;
 
-            var hardwareJson = JsonConvert.SerializeObject(hardware);
+            JsonSerializerSettings settings = new()
+            {
+                ContractResolver = new OrderedContractResolver()
+            };
+
+            var hardwareJson = JsonConvert.SerializeObject(hardware, Formatting.Indented, settings);
             await Verifier.VerifyJsonAsync(hardwareJson);
         }
     }

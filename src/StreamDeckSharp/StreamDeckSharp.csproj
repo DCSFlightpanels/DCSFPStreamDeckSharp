@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="HidSharp" Version="2.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="17.6.36389" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <None Include="icon.png" Pack="true" PackagePath="" />
   </ItemGroup>

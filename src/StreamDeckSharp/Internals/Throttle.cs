@@ -6,37 +6,37 @@ namespace StreamDeckSharp.Internals
 {
     internal class Throttle
     {
-        private readonly Stopwatch stopwatch = Stopwatch.StartNew();
-        private long sumBytesInWindow = 0;
-        private int sleepCount = 0;
+        private readonly Stopwatch _stopwatch = Stopwatch.StartNew();
+        private long _sumBytesInWindow = 0;
+        private int _sleepCount = 0;
 
         public double BytesPerSecondLimit { get; set; } = double.PositiveInfinity;
         public int ByteCountBeforeThrottle { get; set; } = 16_000;
 
         public void MeasureAndBlock(int bytes)
         {
-            sumBytesInWindow += bytes;
+            _sumBytesInWindow += bytes;
 
-            var elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-            var estimatedSeconds = sumBytesInWindow / BytesPerSecondLimit;
+            var elapsedSeconds = _stopwatch.Elapsed.TotalSeconds;
+            var estimatedSeconds = _sumBytesInWindow / BytesPerSecondLimit;
 
-            if (sumBytesInWindow > ByteCountBeforeThrottle && elapsedSeconds < estimatedSeconds)
+            if (_sumBytesInWindow > ByteCountBeforeThrottle && elapsedSeconds < estimatedSeconds)
             {
                 var delta = Math.Max(1, (int)((estimatedSeconds - elapsedSeconds) * 1000));
                 Thread.Sleep(delta);
-                sleepCount++;
+                _sleepCount++;
             }
 
             if (elapsedSeconds >= 1)
             {
-                if (sleepCount > 1)
+                if (_sleepCount > 1)
                 {
-                    Debug.WriteLine($"[Throttle] {sumBytesInWindow / elapsedSeconds}");
+                    Debug.WriteLine($"[Throttle] {_sumBytesInWindow / elapsedSeconds}");
                 }
 
-                stopwatch.Restart();
-                sumBytesInWindow = 0;
-                sleepCount = 0;
+                _stopwatch.Restart();
+                _sumBytesInWindow = 0;
+                _sleepCount = 0;
             }
         }
     }

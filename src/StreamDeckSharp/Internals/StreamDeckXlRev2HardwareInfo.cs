@@ -12,6 +12,6 @@ namespace StreamDeckSharp.Internals
         }
 
         public override string DeviceName => "Stream Deck XL Rev2";
-        public override int UsbProductId => ProductIds.StreamDeckXL;
+        public override int UsbProductId => ProductIds.STREAM_DECK_XL;
     }
 }
