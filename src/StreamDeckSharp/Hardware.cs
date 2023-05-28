@@ -52,7 +52,7 @@ namespace StreamDeckSharp
         /// <summary>
         /// Details about the Stream Deck Plus
         /// </summary>
-        public static IUsbHidHardware SteamDeckPlus
+        public static IUsbHidHardware StreamDeckPlus
             => InternalStreamDeckPlus;
 
         internal static IHardwareInternalInfos InternalStreamDeck { get; }
