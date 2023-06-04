@@ -17,7 +17,9 @@ namespace StreamDeckSharp.Internals
 
         private byte[] _cachedNullImage = null;
 
-        protected StreamDeckJpgHardwareBase(GridKeyLayout keyPositions)
+        private readonly bool _flipBitmapImage = true;
+
+        protected StreamDeckJpgHardwareBase(GridKeyLayout keyPositions, bool flipBitmapImage)
         {
             _jpgEncoder = new JpegEncoder()
             {
@@ -26,6 +28,7 @@ namespace StreamDeckSharp.Internals
 
             Keys = keyPositions;
             _imgSize = keyPositions.KeySize;
+            _flipBitmapImage = flipBitmapImage;
         }
 
         public abstract int UsbProductId { get; }
@@ -134,30 +137,31 @@ namespace StreamDeckSharp.Internals
 
         private byte[] EncodeImageToJpg(ReadOnlySpan<byte> bgr24)
         {
-            // Flip XY ... for some reason the JPEG devices have flipped x and y coordinates.
             var flippedData = new byte[_imgSize * _imgSize * 3];
-
-            for (var y = 0; y < _imgSize; y++)
+            if (_flipBitmapImage)
             {
-                for (var x = 0; x < _imgSize; x++)
+                // Flip XY ... for some reason the JPEG devices have flipped x and y coordinates.
+                for (var y = 0; y < _imgSize; y++)
                 {
-                    var x1 = _imgSize - 1 - x;
-                    var y1 = _imgSize - 1 - y;
+                    for (var x = 0; x < _imgSize; x++)
+                    {
+                        var x1 = _imgSize - 1 - x;
+                        var y1 = _imgSize - 1 - y;
 
-                    var pTarget = (y * _imgSize + x) * 3;
-                    var pSource = (y1 * _imgSize + x1) * 3;
+                        var pTarget = (y * _imgSize + x) * 3;
+                        var pSource = (y1 * _imgSize + x1) * 3;
 
-                    flippedData[pTarget + 0] = bgr24[pSource + 0];
-                    flippedData[pTarget + 1] = bgr24[pSource + 1];
-                    flippedData[pTarget + 2] = bgr24[pSource + 2];
+                        flippedData[pTarget + 0] = bgr24[pSource + 0];
+                        flippedData[pTarget + 1] = bgr24[pSource + 1];
+                        flippedData[pTarget + 2] = bgr24[pSource + 2];
+                    }
                 }
             }
 
-            using var image = Image.LoadPixelData<Bgr24>(flippedData, _imgSize, _imgSize);
+            using var image = Image.LoadPixelData<Bgr24>(_flipBitmapImage ? flippedData : bgr24, _imgSize, _imgSize);
 
-            using var memStream = new MemoryStream();
+            using MemoryStream memStream = new();
             image.SaveAsJpeg(memStream, _jpgEncoder);
-
             return memStream.ToArray();
         }
     }
